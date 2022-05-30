@@ -37,4 +37,8 @@ public class DataHelper {
     public static CardInfo getSecondNumber() {
         return new CardInfo("5559000000000002");
     }
+
+    public static CardInfo getThirdNumber() {
+        return new CardInfo("5559000000000007");
+    }
 }

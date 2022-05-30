@@ -3,9 +3,7 @@ package ru.netology.bdd.test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.bdd.data.DataHelper;
-import ru.netology.bdd.data.LoginPage;
-import ru.netology.bdd.data.WrongRefillPage;
-import ru.netology.bdd.data.VerificationPage;
+import ru.netology.bdd.page.LoginPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,11 +55,16 @@ public class RemittanceTest {
     }
 
     @Test
-    void shouldIncorrectTransfer() {
+    void shouldWrongTransfer() {
         var authInfo = DataHelper.getAuthInfo();
-        var loginPage = LoginPage.validLogin(authInfo);
+        var verificationPage = LoginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-        var codeInput = VerificationPage.validCode(verificationCode);
-        var refillPage = WrongRefillPage.incorrectCardTopUp();
+        var dashboardPage = verificationPage.validCode(verificationCode);
+        var firstNumber = DataHelper.getThirdNumber();
+        var secondNumber = DataHelper.getFirstNumber();
+        int amount = 1000;
+        var transferPage = dashboardPage.selectCardToTransfer(secondNumber);
+        dashboardPage = transferPage.makeTransfer(String.valueOf(amount), firstNumber);
+        dashboardPage = transferPage.errorMessage();
     }
 }
